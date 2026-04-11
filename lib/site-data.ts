@@ -1,8 +1,8 @@
 export const siteData = {
   name: 'Pasta Cosi',
-  tagline: 'Chaleur italienne, lumière dorée, table que l’on réserve avec envie.',
+  tagline: 'Une porte, une lueur, une table que l’on désire avant même d’avoir faim.',
   description:
-    'Pasta Cosi est une adresse italienne pensée comme une vraie soirée, sensuelle, généreuse, raffinée, avec une forte présence de salle et des pâtes signatures très désirables.',
+    'Pasta Cosi est une adresse italienne à Paris pensée comme une expérience de seuil, de lumière et de désir, où la salle et la pasta construisent une mémoire immédiate.',
   address: '28 Rue des Carmes, 75005 Paris',
   phone: '+33 1 89 72 14 28',
   email: 'bonjour@pastacosi-paris.com',

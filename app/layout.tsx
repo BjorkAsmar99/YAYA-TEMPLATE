@@ -13,9 +13,9 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Pasta Cosi | Soirée italienne à Paris',
+  title: 'Pasta Cosi | Entrer pour dîner',
   description:
-    'Site éditorial premium pour Pasta Cosi, restaurant italien à Paris pensé comme une soirée en quatre actes.',
+    'Expérience éditoriale et cinématique pour Pasta Cosi, restaurant italien à Paris, pensée comme un seuil, une lumière et une envie de réserver.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
