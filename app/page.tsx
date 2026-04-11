@@ -45,7 +45,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5 text-sm text-stone-200">
-Hero photo ready to be swapped with the final selected dining room image from the provided Pasta Cosi shoot.
+                  Salle signature, lumière chaude, service immersif.
                 </div>
               </div>
             </div>
@@ -166,28 +166,38 @@ Hero photo ready to be swapped with the final selected dining room image from th
           <p>Gallery / Moments</p>
           <h2>Real restaurant photography, staged as a cinematic sequence.</h2>
         </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {galleryPlaceholders.map((asset, index) => (
-            <div key={asset.title} className="glass-panel overflow-hidden">
-              <div className="relative aspect-[4/5] overflow-hidden border-b border-white/10 bg-stone-900">
-                <Image
-                  src={realAssetSuggestions.gallery[index]}
-                  alt={asset.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/30 px-3 py-1 text-xs tracking-[0.3em] text-stone-200">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-12 xl:grid-rows-2">
+          {galleryPlaceholders.map((asset, index) => {
+            const layout = [
+              'xl:col-span-3 xl:row-span-2',
+              'xl:col-span-5 xl:row-span-1',
+              'xl:col-span-4 xl:row-span-1',
+              'xl:col-span-4 xl:row-span-1',
+            ][index];
+            const aspect = index === 0 ? 'aspect-[4/5]' : index === 2 ? 'aspect-[16/10]' : 'aspect-[16/9]';
+
+            return (
+              <div key={asset.title} className={`glass-panel overflow-hidden ${layout}`}>
+                <div className={`relative overflow-hidden border-b border-white/10 bg-stone-900 ${aspect}`}>
+                  <Image
+                    src={realAssetSuggestions.gallery[index]}
+                    alt={asset.title}
+                    fill
+                    className={`object-cover ${index === 1 ? 'object-center' : index === 2 ? 'object-[center_60%]' : 'object-center'}`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/30 px-3 py-1 text-xs tracking-[0.3em] text-stone-200">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-xl text-stone-100">{asset.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-stone-400">{asset.note}</p>
+                </div>
               </div>
-              <div className="p-5">
-                <h3 className="text-xl text-stone-100">{asset.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-stone-400">{asset.note}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </AnimatedSection>
 

@@ -63,19 +63,19 @@ export const experiences = [
 export const galleryPlaceholders = [
   {
     title: 'Salle & lumière chaude',
-    note: 'Utiliser les vues de salle avec murs en pierre, suspensions chaudes et banquettes vert profond.',
+    note: 'Une lecture immédiate de l’atmosphère Pasta Cosi, entre pierre, velours et lumière dorée.',
   },
   {
     title: 'Pâtes signatures',
-    note: 'Utiliser les assiettes crémeuses, rigatonis à la truffe, tagliatelles et plans rapprochés généreux.',
+    note: 'Le plat iconique prend la scène avec un cadrage gourmand, généreux et très premium.',
   },
   {
     title: 'Cocktails & desserts',
-    note: 'Associer tiramisu, pain perdu, cocktails fruités et tables dressées pour renforcer l’émotion.',
+    note: 'Une respiration plus lifestyle, pensée pour la désirabilité et le partage social.',
   },
   {
     title: 'Bar & ambiance',
-    note: 'Utiliser le bar, les matières, les lumières et la profondeur architecturale comme respiration visuelle.',
+    note: 'Le décor affirme le niveau de lieu et prolonge la promesse d’une vraie sortie.',
   },
 ];
 
