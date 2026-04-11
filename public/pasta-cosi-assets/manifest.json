@@ -1,0 +1,10 @@
+{
+  "note": "Place your provided Pasta Cosi photos in this folder and map filenames below as needed.",
+  "recommended": {
+    "hero": "hero-dining-room.jpg",
+    "gallery1": "gallery-ambience.jpg",
+    "gallery2": "gallery-pasta-truffle.jpg",
+    "gallery3": "gallery-dessert.jpg",
+    "gallery4": "gallery-bar.jpg"
+  }
+}

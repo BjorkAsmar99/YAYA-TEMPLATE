@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --marble-cream: #F5F3EE;
+  --marble-vein: #D4CFC4;
+  --concrete-warm: #E8E4DD;
+  --concrete-dark: #A39E93;
+  --brass-light: #D4AF78;
+  --brass-deep: #B8935E;
+  --text-primary: #2A2621;
+  --text-secondary: #5C5751;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--text-primary);
+  background: var(--marble-cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* GPU acceleration for smooth animations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Etched text effect foundation */
+.etched-text {
+  position: relative;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 
+    0 1px 0 rgba(255,255,255,0.2),
+    0 -1px 0 rgba(0,0,0,0.1);
+}
+
+/* Marble texture base */
+.marble-texture {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212,207,196,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(212,207,196,0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(212,207,196,0.15) 0%, transparent 40%);
+  background-color: var(--marble-cream);
+  background-blend-mode: multiply;
+}
+
+/* Concrete texture base */
+.concrete-texture {
+  background-image: 
+    linear-gradient(90deg, rgba(163,158,147,0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(163,158,147,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-color: var(--concrete-warm);
+}
+
+/* Brass shimmer effect */
+.brass-shimmer {
+  background: linear-gradient(
+    120deg, 
+    var(--brass-deep) 0%, 
+    var(--brass-light) 45%, 
+    var(--brass-deep) 55%,
+    var(--brass-light) 100%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Image loading states */
+.image-loading {
+  background: linear-gradient(
+    90deg,
+    rgba(212,207,196,0.2) 0%,
+    rgba(212,207,196,0.4) 50%,
+    rgba(212,207,196,0.2) 100%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 4px;
+}
