@@ -1,90 +1,14 @@
 export const siteData = {
   name: 'Pasta Cosi',
-  tagline: 'Chaleur italienne, lumière dorée, pasta inoubliable.',
+  tagline: 'Chaleur italienne, lumière dorée, table que l’on réserve avec envie.',
   description:
-    'Pasta Cosi mêle générosité italienne, ambiance chaleureuse et assiettes signatures dans une expérience pensée comme un vrai moment de partage.',
+    'Pasta Cosi est une adresse italienne pensée comme une vraie soirée, sensuelle, généreuse, raffinée, avec une forte présence de salle et des pâtes signatures très désirables.',
   address: '28 Rue des Carmes, 75005 Paris',
   phone: '+33 1 89 72 14 28',
   email: 'bonjour@pastacosi-paris.com',
   hours: [
-    'Formule midi · Lun - Dim · 12:00 - 15:00',
+    'Déjeuner · Lun - Dim · 12:00 - 15:00',
     'Dîner · Mar - Dim · 19:00 - 23:00',
     'Sur place ou à emporter',
-  ],
-};
-
-export const menuHighlights = [
-  {
-    title: 'Rigatonis à la truffe',
-    price: '19.90',
-    description: 'Plat phare de la formule midi, servi dans une sélection généreuse et premium.',
-  },
-  {
-    title: 'Linguinis aux crevettes',
-    price: '19.90',
-    description: 'Une proposition marine élégante dans la formule déjeuner, pensée pour un rendu gourmand et raffiné.',
-  },
-  {
-    title: 'Escalope milanaise',
-    price: '15',
-    description: 'Poulet pané et pâtes nappées de sauce fromagère, un plat visuel fort pour la carte.',
-  },
-  {
-    title: 'Filet de boeuf',
-    price: '24',
-    description: '250g, fleur de sel, sauce au choix, accompagné de frites maison.',
-  },
-];
-
-export const moments = [
-  'Golden hour on the marble pass',
-  'Chef Billy finishing pasta in copper pans',
-  'Candles, velvet, and a low jazz dinner room',
-  'Aperitivo pours and handwritten menu notes',
-  'Late-night tiramisu under warm amber light',
-  'The terrace after rain, glowing like cinema',
-];
-
-export const experiences = [
-  {
-    title: 'The Arrival',
-    text: 'A dark lacquered entry, scent of citrus and basil, a host who already knows your name.',
-  },
-  {
-    title: 'The Open Kitchen',
-    text: 'Flour in the air, bronze dies, choreography of pans and service in full view.',
-  },
-  {
-    title: 'The Dining Room',
-    text: 'Velvet banquettes, alabaster lamps, and a soundtrack that moves with the evening.',
-  },
-];
-
-export const galleryPlaceholders = [
-  {
-    title: 'Salle & lumière chaude',
-    note: 'Une lecture immédiate de l’atmosphère Pasta Cosi, entre pierre, velours et lumière dorée.',
-  },
-  {
-    title: 'Pâtes signatures',
-    note: 'Le plat iconique prend la scène avec un cadrage gourmand, généreux et très premium.',
-  },
-  {
-    title: 'Cocktails & desserts',
-    note: 'Une respiration plus lifestyle, pensée pour la désirabilité et le partage social.',
-  },
-  {
-    title: 'Bar & ambiance',
-    note: 'Le décor affirme le niveau de lieu et prolonge la promesse d’une vraie sortie.',
-  },
-];
-
-export const realAssetSuggestions = {
-  hero: '/pasta-cosi-assets/hero-dining-room.jpg',
-  gallery: [
-    '/pasta-cosi-assets/gallery-ambience.jpg',
-    '/pasta-cosi-assets/gallery-pasta-truffle.jpg',
-    '/pasta-cosi-assets/gallery-dessert.jpg',
-    '/pasta-cosi-assets/gallery-bar.jpg',
   ],
 };
