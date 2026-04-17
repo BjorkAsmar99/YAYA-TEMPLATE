@@ -240,9 +240,17 @@ function IntroCascade({
       />
       <motion.div
         className="pc-intro-cascade__fade"
-        initial={{ opacity: 1 }}
-        animate={phase === 'reveal' ? { opacity: [1, 0.86, 0.38, 0] } : { opacity: 1 }}
-        transition={{ duration: 0.84, times: [0, 0.28, 0.72, 1], ease: introLiquidEase }}
+        initial={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        animate={
+          phase === 'reveal'
+            ? {
+                opacity: [1, 0.94, 0.46, 0],
+                scale: [1, 1.015, 1.045, 1.06],
+                filter: ['blur(0px)', 'blur(4px)', 'blur(12px)', 'blur(18px)'],
+              }
+            : { opacity: 1, scale: 1, filter: 'blur(0px)' }
+        }
+        transition={{ duration: 0.96, times: [0, 0.24, 0.7, 1], ease: introLiquidEase }}
       />
     </div>
   );
