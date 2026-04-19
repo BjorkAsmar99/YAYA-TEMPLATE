@@ -1,455 +1,385 @@
 'use client';
 
 import Image from 'next/image';
-import type { RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Clock3, MapPin, Phone } from 'lucide-react';
-import { siteData } from '@/lib/site-data';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight, Clock3, MapPin, Phone, Wine, Menu as MenuIcon } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SmoothScroll } from '@/components/smooth-scroll';
 
-const signatureDishes = [
+gsap.registerPlugin(ScrollTrigger);
+
+const navLinks = [
+  { label: 'Vision', href: '#vision' },
+  { label: 'Cuisine', href: '#cuisine' },
+  { label: 'Cave', href: '#cave' },
+  { label: 'Réserver', href: '#reservation' },
+] as const;
+
+const manifesto = [
+  'Cuisine de braise, jus profonds et clarté graphique.',
+  'Service calme, précis, presque architectural.',
+  'Cave de caractère, pensée pour les longues soirées.',
+] as const;
+
+const scenes = [
   {
-    name: 'Tagliolini al tartufo',
-    note: 'Crème légère, profondeur boisée, finale longue.',
+    index: '01',
+    title: 'Le seuil s’ouvre comme une matière.',
+    text: 'Le noir bordeaux, le laiton et la lumière vanille créent un accueil presque cinématographique, discret et immédiatement statutaire.',
   },
   {
-    name: 'Paccheri alla vodka',
-    note: 'Tomate dense, soie épicée, chaleur maîtrisée.',
+    index: '02',
+    title: 'Le repas avance par masses et respirations.',
+    text: 'Plats dressés avec tension, rythme du service ralenti, plans larges et détails rapprochés pour laisser vivre chaque séquence.',
   },
   {
-    name: 'Tiramisu maison',
-    note: 'Nuage poudré, café net, douceur retenue.',
+    index: '03',
+    title: 'La fin reste chaude, longue, mémorable.',
+    text: 'Desserts infusés, dernières bouteilles, conversation assourdie. Le lieu garde une trace, pas seulement une image.',
   },
 ] as const;
 
-const narrativeBlocks = [
+const menuMoments = [
   {
-    eyebrow: 'Pasta Cosi · trattoria contemporaine',
-    title: 'Un lieu italien pensé comme une présence, pas comme un catalogue.',
-    text:
-      'La première version du site pose le ton. Fond minéral, rythme éditorial, images larges, texte rare. On ne remplit pas l’écran, on construit un désir calme et immédiat.',
-    image: '/pasta-cosi-assets/hero-dining-room.jpg',
-    alt: 'Grande table dressée dans la salle de Pasta Cosi',
+    label: 'Entrée',
+    title: 'Crudo de sériole, agrumes fumés, huile de piment doux',
+    note: 'Tension iodée, éclat froid, démarrage net.',
   },
   {
-    eyebrow: 'Matière · geste · chaleur',
-    title: 'La pasta devient le centre visuel, comme une scène captée au bon moment.',
-    text:
-      'La référence Blend Bend fonctionne par retenue. Ici, on reprend cette discipline, puis on la traduit pour un restaurant parisien: plus sensuel, plus habité, plus organique.',
-    image: '/pasta-cosi-assets/gallery-pasta-truffle.jpg',
-    alt: 'Assiette de pâtes travaillée en gros plan',
+    label: 'Plat signature',
+    title: 'Pastrami de veau rosé, betterave laquée, jus cacao',
+    note: 'Dense, brillant, construit pour les rouges profonds.',
+  },
+  {
+    label: 'Final',
+    title: 'Poire confite, safran, tuile chaude au miel',
+    note: 'Fin veloutée, précise, presque silencieuse.',
   },
 ] as const;
 
-const details = [
-  'Cuisine italienne contemporaine',
-  'Paris 5e, adresse confidentielle',
-  'Réservations dîner et déjeuner',
+const cellar = [
+  {
+    house: 'Jérôme Prévost',
+    bottle: 'La Closerie Extra Brut',
+    pairing: 'Accueil, cru, premier feu',
+    price: '180€',
+  },
+  {
+    house: 'Domaine Roulot',
+    bottle: 'Meursault 2021',
+    pairing: 'Poissons nacrés, sauces courtes',
+    price: '260€',
+  },
+  {
+    house: 'Château Musar',
+    bottle: 'Rouge 2017',
+    pairing: 'Viandes fumées, fin de table',
+    price: '210€',
+  },
 ] as const;
 
-const introRows = 14;
-const centerIndex = Math.floor(introRows / 2);
-const introSnapEase: [number, number, number, number] = [0.22, 0.84, 0.3, 1];
-const introDigitalEase: [number, number, number, number] = [0.76, 0, 0.24, 1];
-const introLiquidEase: [number, number, number, number] = [0.19, 0.82, 0.22, 1];
+const gallery = [
+  'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1400&q=80',
+  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80',
+] as const;
 
-function IntroCascade({
-  onDone,
-  targetRef,
-}: {
-  onDone: () => void;
-  targetRef: RefObject<HTMLElement | null>;
-}) {
+function IntroLoader() {
+  const [done, setDone] = useState(false);
   const reduceMotion = useReducedMotion();
-  const [phase, setPhase] = useState<'spread' | 'contract' | 'collapse' | 'reveal'>('spread');
-  const [viewportHeight, setViewportHeight] = useState(1080);
-  const [heroSnapshot, setHeroSnapshot] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
-  const finishedRef = useRef(false);
 
   useEffect(() => {
     if (reduceMotion) {
-      onDone();
-      return;
+      const timer = window.setTimeout(() => setDone(true), 150);
+      return () => window.clearTimeout(timer);
     }
 
-    const updateMetrics = () => {
-      setViewportHeight(window.innerHeight || 1080);
-      const target = targetRef.current;
-      if (target) {
-        const rect = target.getBoundingClientRect();
-        setHeroSnapshot({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height,
-        });
-      }
-    };
-    updateMetrics();
-    window.addEventListener('resize', updateMetrics);
-
-    const html = document.documentElement;
-    const body = document.body;
-    html.classList.add('pc-intro-lock');
-    body.classList.add('pc-intro-lock');
-
-    const timers = [
-      window.setTimeout(() => setPhase('contract'), 120),
-      window.setTimeout(() => setPhase('collapse'), 520),
-      window.setTimeout(() => setPhase('reveal'), 920),
-      window.setTimeout(() => {
-        if (finishedRef.current) return;
-        finishedRef.current = true;
-        html.classList.remove('pc-intro-lock');
-        body.classList.remove('pc-intro-lock');
-        onDone();
-      }, 1960),
-    ];
+    document.body.classList.add('is-loading');
+    const timer = window.setTimeout(() => {
+      setDone(true);
+      document.body.classList.remove('is-loading');
+    }, 2600);
 
     return () => {
-      timers.forEach((timer) => window.clearTimeout(timer));
-      window.removeEventListener('resize', updateMetrics);
-      html.classList.remove('pc-intro-lock');
-      body.classList.remove('pc-intro-lock');
-    };
-  }, [onDone, reduceMotion, targetRef]);
-
-  if (reduceMotion) return null;
-
-  return (
-    <div className={`pc-intro-cascade pc-intro-cascade--${phase}`} aria-hidden="true">
-      <div className="pc-intro-cascade__stack">
-        {Array.from({ length: introRows }).map((_, index) => {
-          const offset = index - centerIndex;
-          const distance = Math.abs(offset);
-          const isCenter = index === centerIndex;
-          const spreadY = Math.round(offset * 74);
-          const contractY = Math.round(offset * 18);
-          const collapseY = 0;
-          const revealY = Math.round(viewportHeight * (offset < 0 ? -0.78 : 0.78));
-
-          let animate;
-          let transition;
-          if (phase === 'contract') {
-            animate = {
-              y: contractY,
-              opacity: isCenter ? 1 : Math.max(0.5, 0.88 - distance * 0.06),
-              scale: isCenter ? 1 : 0.986 - distance * 0.005,
-              filter: 'blur(0px)',
-            };
-            transition = {
-              duration: 0.3,
-              delay: distance * 0.008,
-              ease: introSnapEase,
-            };
-          } else if (phase === 'collapse') {
-            animate = {
-              y: collapseY,
-              opacity: isCenter ? 1 : Math.max(0.14, 0.22 - distance * 0.008),
-              scale: 1,
-              filter: 'blur(0px)',
-            };
-            transition = {
-              duration: 0.32,
-              delay: distance * 0.006,
-              ease: introSnapEase,
-            };
-          } else if (phase === 'reveal') {
-            animate = {
-              y: isCenter ? [0, 4, 0] : [collapseY, collapseY * 0.45, revealY],
-              opacity: isCenter ? [1, 0.6, 0] : [Math.max(0.12, 0.22 - distance * 0.008), 0.16, 0],
-              scale: isCenter ? [1, 1.02, 0.94] : [1, 1.015, 0.96],
-              filter: isCenter ? ['blur(0px)', 'blur(10px)', 'blur(22px)'] : ['blur(0px)', 'blur(6px)', 'blur(18px)'],
-            };
-            transition = {
-              duration: 0.76,
-              times: [0, 0.34, 1],
-              delay: distance * 0.016,
-              ease: introDigitalEase,
-            };
-          } else {
-            animate = {
-              y: spreadY,
-              opacity: 1,
-              scale: 1,
-              filter: 'blur(0px)',
-            };
-            transition = { duration: 0 };
-          }
-
-          return (
-            <motion.div
-              key={index}
-              className={`pc-intro-cascade__row ${isCenter ? 'is-center' : ''}`}
-              initial={{ y: spreadY, opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              animate={animate}
-              transition={transition}
-            >
-              <span>Pasta Cosi</span>
-            </motion.div>
-          );
-        })}
-      </div>
-      <motion.div
-        className="pc-intro-cascade__psyche"
-        initial={{ opacity: 0, scale: 0.92, rotate: -8, filter: 'blur(36px)' }}
-        animate={
-          phase === 'reveal'
-            ? {
-                opacity: [0, 0.88, 0.68, 0.18, 0],
-                scale: [0.92, 1.02, 1.12, 1.18, 1.24],
-                rotate: [-8, -3, 4, 7, 10],
-                filter: ['blur(36px)', 'blur(18px)', 'blur(26px)', 'blur(34px)', 'blur(44px)'],
-              }
-            : { opacity: 0, scale: 0.92, rotate: -8, filter: 'blur(36px)' }
-        }
-        transition={{ duration: 1.14, times: [0, 0.18, 0.48, 0.76, 1], ease: introLiquidEase }}
-      />
-      <motion.div
-        className="pc-intro-cascade__morph"
-        initial={heroSnapshot ? { opacity: 0, top: '50%', left: '50%', width: '24vw', height: '18vh', x: '-50%', y: '-50%', scale: 0.68, rotate: -10, filter: 'blur(30px)' } : false}
-        animate={
-          phase === 'reveal' && heroSnapshot
-            ? {
-                opacity: [0, 0.72, 0.96, 0.48, 0],
-                top: [`50%`, `${heroSnapshot.top + heroSnapshot.height * 0.52}px`, `${heroSnapshot.top + heroSnapshot.height * 0.5}px`, `${heroSnapshot.top + heroSnapshot.height * 0.5}px`, `${heroSnapshot.top + heroSnapshot.height * 0.5}px`],
-                left: [`50%`, `${heroSnapshot.left + heroSnapshot.width * 0.48}px`, `${heroSnapshot.left + heroSnapshot.width * 0.5}px`, `${heroSnapshot.left + heroSnapshot.width * 0.5}px`, `${heroSnapshot.left + heroSnapshot.width * 0.5}px`],
-                width: ['24vw', `${Math.max(heroSnapshot.width * 0.5, 260)}px`, `${heroSnapshot.width * 0.9}px`, `${heroSnapshot.width * 1.04}px`, `${heroSnapshot.width * 1.1}px`],
-                height: ['18vh', `${Math.max(heroSnapshot.height * 0.34, 160)}px`, `${heroSnapshot.height * 0.84}px`, `${heroSnapshot.height * 0.98}px`, `${heroSnapshot.height * 1.06}px`],
-                x: ['-50%', '-50%', '-50%', '-50%', '-50%'],
-                y: ['-50%', '-50%', '-50%', '-50%', '-50%'],
-                scale: [0.68, 0.84, 0.96, 1.02, 1.06],
-                rotate: [-10, -4, 3, 6, 8],
-                filter: ['blur(30px)', 'blur(18px)', 'blur(20px)', 'blur(30px)', 'blur(40px)'],
-              }
-            : { opacity: 0, scale: 0.68, rotate: -10, filter: 'blur(30px)' }
-        }
-        transition={{ duration: 1.18, times: [0, 0.2, 0.52, 0.8, 1], ease: introLiquidEase }}
-      />
-      <motion.div
-        className="pc-intro-cascade__grain"
-        initial={{ opacity: 0 }}
-        animate={phase === 'reveal' ? { opacity: [0, 0.18, 0.12, 0] } : { opacity: 0 }}
-        transition={{ duration: 1.02, times: [0, 0.24, 0.72, 1], ease: introLiquidEase }}
-      />
-      <motion.div
-        className="pc-intro-cascade__veil"
-        initial={{ opacity: 0 }}
-        animate={phase === 'reveal' ? { opacity: [0, 0.28, 0.76, 1] } : { opacity: 0 }}
-        transition={{ duration: 0.82, times: [0, 0.24, 0.68, 1], ease: introLiquidEase }}
-      />
-      <motion.div
-        className="pc-intro-cascade__fade"
-        initial={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        animate={
-          phase === 'reveal'
-            ? {
-                opacity: [1, 0.94, 0.46, 0],
-                scale: [1, 1.015, 1.045, 1.06],
-                filter: ['blur(0px)', 'blur(4px)', 'blur(12px)', 'blur(18px)'],
-              }
-            : { opacity: 1, scale: 1, filter: 'blur(0px)' }
-        }
-        transition={{ duration: 0.96, times: [0, 0.24, 0.7, 1], ease: introLiquidEase }}
-      />
-    </div>
-  );
-}
-
-function Wordmark() {
-  const reduceMotion = useReducedMotion();
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    if (reduceMotion) return;
-
-    const update = () => {
-      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      const next = Math.min(window.scrollY / max, 1);
-      setProgress(next);
-    };
-
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-
-    return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.clearTimeout(timer);
+      document.body.classList.remove('is-loading');
     };
   }, [reduceMotion]);
 
-  const scale = 1 - progress * 0.08;
-  const translateY = progress * -22;
-  const letterSpacing = -0.055 - progress * 0.01;
-
   return (
-    <div className="pc-wordmark-wrap" aria-label="Pasta Cosi">
-      <div
-        className="pc-wordmark"
-        style={{
-          transform: `translate3d(0, ${translateY}px, 0) scale(${scale})`,
-          letterSpacing: `${letterSpacing}em`,
-        }}
-      >
-        <span>Pasta</span>
-        <span>Cosi</span>
-      </div>
-    </div>
+    <AnimatePresence>
+      {!done && (
+        <motion.div
+          className="loader-shell"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.45, ease: [0.7, 0, 0.3, 1] } }}
+        >
+          <motion.div className="loader-panel loader-panel-left" initial={{ x: 0 }} exit={{ x: '-102%', transition: { duration: 1.1, ease: [0.76, 0, 0.24, 1] } }} />
+          <motion.div className="loader-panel loader-panel-right" initial={{ x: 0 }} exit={{ x: '102%', transition: { duration: 1.1, ease: [0.76, 0, 0.24, 1] } }} />
+          <div className="loader-content">
+            <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="eyebrow">
+              Pastrani Vino, Paris VIII
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 40, letterSpacing: '0.2em' }}
+              animate={{ opacity: 1, y: 0, letterSpacing: '-0.06em' }}
+              transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Pastrani Vino
+            </motion.h1>
+            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.1, delay: 0.35, ease: [0.76, 0, 0.24, 1] }} className="loader-line" />
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ duration: 0.8, delay: 0.8 }} className="loader-note">
+              Dining in warm shadow, bronze light and slow fire.
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
-export default function Home() {
-  const [introDone, setIntroDone] = useState(false);
-  const heroRef = useRef<HTMLElement | null>(null);
+function FloatingNav() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <main className="pc-page">
-      {!introDone && <IntroCascade onDone={() => setIntroDone(true)} targetRef={heroRef} />}
-
-      <header className="pc-header">
-        <nav className="pc-nav" aria-label="Navigation principale">
-          <a href="#hero" className="pc-nav__meta">
-            Pasta Cosi
-          </a>
-          <div className="pc-nav__links">
-            <a href="#story">Histoire</a>
-            <a href="#carte">Carte</a>
-            <a href="#reservation">Réserver</a>
-          </div>
-        </nav>
-
-        <section className="pc-hero" id="hero" ref={heroRef}>
-          <Wordmark />
-
-          <div className="pc-hero__media">
-            <Image
-              src="/pasta-cosi-assets/hero-dining-room.jpg"
-              alt="Vue de la salle principale de Pasta Cosi"
-              fill
-              priority
-              sizes="(max-width: 900px) 100vw, 86vw"
-              className="object-cover"
-            />
-
-            <div className="pc-hero__badge">
-              <div className="pc-hero__badge-mark" aria-hidden="true">
-                <span />
-                <span />
-              </div>
-              <p>Trattoria italienne contemporaine</p>
-            </div>
-
-            <div className="pc-hero__caption">Pasta Cosi, Paris</div>
-          </div>
-        </section>
-      </header>
-
-      <section className="pc-intro" id="story">
-        <div className="pc-intro__left">
-          <p className="pc-eyebrow">Première impression</p>
-          <h1>Une landing page qui installe immédiatement le lieu, sans effet cheap, sans blocs génériques.</h1>
-        </div>
-
-        <div className="pc-intro__right">
-          <p>
-            L’arrivée devient maintenant une vraie mise en scène. Le nom se répète, se resserre, puis la dernière ligne vient se fondre dans le wordmark de la hero pour créer une entrée plus cinématographique et plus nette.
-          </p>
-
-          <ul className="pc-detail-list">
-            {details.map((item) => (
-              <li key={item}>{item}</li>
+    <header className="floating-nav">
+      <a href="#top" className="brand-lockup">
+        <span>Pastrani</span>
+        <span>Vino</span>
+      </a>
+      <nav className="nav-desktop">
+        {navLinks.map((link) => (
+          <a key={link.href} href={link.href}>{link.label}</a>
+        ))}
+      </nav>
+      <a href="#reservation" className="nav-cta">Réserver</a>
+      <button type="button" aria-label="Ouvrir le menu" className="nav-burger" onClick={() => setOpen((v) => !v)}>
+        <MenuIcon size={18} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.nav className="nav-mobile" initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }}>
+            {navLinks.map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>
             ))}
-          </ul>
-        </div>
-      </section>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
 
-      <section className="pc-story-grid" aria-label="Narration visuelle">
-        {narrativeBlocks.map((block, index) => (
-          <article key={block.title} className={`pc-story-card ${index === 1 ? 'is-shifted' : ''}`}>
-            <div className="pc-story-card__copy">
-              <p className="pc-eyebrow">{block.eyebrow}</p>
-              <h2>{block.title}</h2>
-              <p>{block.text}</p>
-            </div>
-            <div className="pc-story-card__media">
-              <Image
-                src={block.image}
-                alt={block.alt}
-                fill
-                sizes="(max-width: 900px) 100vw, 50vw"
-                className="object-cover"
-              />
+function HeroSection() {
+  const ref = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
+  const copyY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
+
+  return (
+    <section id="top" ref={ref} className="hero-section">
+      <div className="hero-grid">
+        <motion.div className="hero-copy" style={{ y: copyY }}>
+          <p className="eyebrow">Restaurant éditorial, cave d’auteur, service du soir</p>
+          <h1>Une table pensée comme un lieu d’architecture intérieure.</h1>
+          <p className="hero-text">
+            Pastrani Vino compose une expérience premium entre feu doux, vins sculptés et lumière bordeaux. Plus calme qu’un flagship, plus marquant qu’un restaurant classique.
+          </p>
+          <div className="hero-actions">
+            <a href="#reservation" className="button-primary">Réserver une soirée</a>
+            <a href="#vision" className="button-secondary">Explorer la maison</a>
+          </div>
+          <div className="manifesto-grid">
+            {manifesto.map((item) => (
+              <div key={item} className="manifesto-card">{item}</div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div className="hero-media" style={{ y: mediaY }}>
+          <div className="hero-image-wrap">
+            <Image src={gallery[0]} alt="Salle premium de restaurant" fill priority sizes="(max-width: 1024px) 100vw, 42vw" className="hero-image" />
+            <div className="hero-image-overlay" />
+          </div>
+          <div className="hero-aside top">
+            <span>Signature</span>
+            <strong>Pastrami de veau, jus brun, betterave braisée</strong>
+          </div>
+          <div className="hero-aside bottom">
+            <span>Atmosphère</span>
+            <strong>Calme, précis, feutré, légèrement dramatique</strong>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function VisionSection() {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>('.reveal-card').forEach((card) => {
+        gsap.fromTo(card, { y: 90, opacity: 0.2 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: card, start: 'top 86%', end: 'top 40%', scrub: 1 },
+        });
+      });
+    }, ref);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section id="vision" ref={ref} className="vision-section">
+      <div className="section-heading split">
+        <div>
+          <p className="eyebrow">Vision</p>
+          <h2>Un storytelling lent, construit en séquences plutôt qu’en blocs.</h2>
+        </div>
+        <p>
+          La composition s’inspire du calme radical de Mersi, puis injecte l’énergie premium et plus frontale d’un restaurant de destination. L’idée n’est pas d’être décoratif, mais désirable.
+        </p>
+      </div>
+
+      <div className="vision-stack">
+        {scenes.map((scene) => (
+          <article key={scene.index} className="reveal-card scene-card">
+            <span>{scene.index}</span>
+            <div>
+              <h3>{scene.title}</h3>
+              <p>{scene.text}</p>
             </div>
           </article>
         ))}
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      <section className="pc-quote-band">
-        <p>
-          “Le bon luxe pour ce site, c’est la maîtrise. Une belle image, une belle phrase, puis le silence.”
-        </p>
-      </section>
-
-      <section className="pc-menu-section" id="carte">
-        <div className="pc-menu-section__intro">
-          <p className="pc-eyebrow">Sélection mise en avant</p>
-          <h2>On montre peu, mais bien. Trois plats suffisent à faire monter l’envie.</h2>
+function CuisineSection() {
+  return (
+    <section id="cuisine" className="cuisine-section">
+      <div className="sticky-frame">
+        <div className="section-heading">
+          <p className="eyebrow">Cuisine</p>
+          <h2>Des plats dressés avec de la tenue, pas avec du bruit.</h2>
         </div>
-
-        <div className="pc-menu-list">
-          {signatureDishes.map((dish) => (
-            <article key={dish.name} className="pc-menu-item">
-              <div>
-                <h3>{dish.name}</h3>
-                <p>{dish.note}</p>
-              </div>
-              <ArrowUpRight size={18} aria-hidden="true" />
+        <div className="menu-grid">
+          {menuMoments.map((item, index) => (
+            <article key={item.title} className="menu-card">
+              <span>0{index + 1}</span>
+              <p className="menu-label">{item.label}</p>
+              <h3>{item.title}</h3>
+              <p>{item.note}</p>
             </article>
           ))}
-        </div>
-      </section>
-
-      <section className="pc-bottom-grid">
-        <div className="pc-bottom-grid__image">
-          <Image
-            src="/pasta-cosi-assets/gallery-ambience.jpg"
-            alt="Ambiance élégante et tamisée du restaurant Pasta Cosi"
-            fill
-            sizes="(max-width: 900px) 100vw, 48vw"
-            className="object-cover"
-          />
-        </div>
-
-        <div className="pc-reservation" id="reservation">
-          <p className="pc-eyebrow">Réservation</p>
-          <h2>La page se termine exactement là où elle doit convertir.</h2>
-
-          <div className="pc-reservation__meta">
-            <p>
-              <Phone size={16} /> {siteData.phone}
-            </p>
-            <p>
-              <MapPin size={16} /> {siteData.address}
-            </p>
-            <p>
-              <Clock3 size={16} /> {siteData.hours[0]}
-            </p>
-            <p>
-              <Clock3 size={16} /> {siteData.hours[1]}
-            </p>
-          </div>
-
-          <div className="pc-reservation__actions">
-            <a className="pc-button pc-button--solid" href={`tel:${siteData.phone.replace(/\s+/g, '')}`}>
-              Appeler
-            </a>
-            <a className="pc-button pc-button--ghost" href={`mailto:${siteData.email}`}>
-              Réserver par email
-            </a>
+          <div className="menu-photo">
+            <Image src={gallery[1]} alt="Dressage gastronomique" fill sizes="(max-width: 1024px) 100vw, 48vw" className="cover-image" />
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
+
+function CellarSection() {
+  const [active, setActive] = useState(0);
+  const current = cellar[active];
+  const tones = useMemo(() => ['tone-one', 'tone-two', 'tone-three'], []);
+
+  return (
+    <section id="cave" className="cellar-section">
+      <div className="section-heading split">
+        <div>
+          <p className="eyebrow">Cave</p>
+          <h2>Une carte courte, statutaire, pensée comme un objet précieux.</h2>
+        </div>
+        <div className="pill-row">
+          {cellar.map((item, index) => (
+            <button key={item.bottle} type="button" onMouseEnter={() => setActive(index)} onClick={() => setActive(index)} className={active === index ? 'is-active' : ''}>
+              {item.house}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className={`cellar-card ${tones[active]}`}>
+        <div>
+          <p className="eyebrow">{current.house}</p>
+          <h3>{current.bottle}</h3>
+          <p>{current.pairing}</p>
+        </div>
+        <div className="cellar-meta">
+          <div><Wine size={18} /><span>Grand caractère</span></div>
+          <strong>{current.price}</strong>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GallerySection() {
+  return (
+    <section className="gallery-section">
+      <div className="gallery-layout">
+        <article className="gallery-large">
+          <Image src={gallery[2]} alt="Champagne servi" fill sizes="(max-width: 1024px) 100vw, 60vw" className="cover-image" />
+          <div className="gallery-overlay" />
+          <div className="gallery-copy">
+            <p className="eyebrow">Matière et lumière</p>
+            <h2>Le projet joue les surfaces, le grain et les contrastes sans perdre la lisibilité commerciale.</h2>
+          </div>
+        </article>
+        <article className="gallery-text">
+          <p>
+            Les teintes imposées sont utilisées en profondeur, jamais en aplats naïfs. Le vert ardoise calme, la vanille allège, le bronze réchauffe, le rouge brun structure, le bordeaux signe.
+          </p>
+          <a href="#reservation">Réserver maintenant <ArrowUpRight size={16} /></a>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function ReservationSection() {
+  return (
+    <section id="reservation" className="reservation-section">
+      <div className="reservation-shell">
+        <div>
+          <p className="eyebrow">Réservation</p>
+          <h2>Privatisations, tables signatures, arrivées tardives au champagne.</h2>
+          <p>
+            Nous ouvrons la réservation pour le dîner, les anniversaires haut de gamme et les demandes plus confidentielles. Réponse rapide, ton sobre, expérience maîtrisée.
+          </p>
+        </div>
+        <div className="reservation-grid">
+          <a href="tel:+33183910027" className="info-card"><Phone size={18} /> <div><span>Téléphone</span><strong>+33 1 83 91 00 27</strong></div></a>
+          <div className="info-card"><MapPin size={18} /> <div><span>Adresse</span><strong>7 passage des Lumières, Paris VIII</strong></div></div>
+          <div className="info-card"><Clock3 size={18} /> <div><span>Horaires</span><strong>Mar. au sam. · 19h à 23h30</strong></div></div>
+          <a href="mailto:reservation@pastranivino.fr" className="button-primary wide">Écrire au concierge <ArrowUpRight size={16} /></a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function Page() {
+  return (
+    <main className="page-shell">
+      <SmoothScroll />
+      <IntroLoader />
+      <FloatingNav />
+      <HeroSection />
+      <VisionSection />
+      <CuisineSection />
+      <CellarSection />
+      <GallerySection />
+      <ReservationSection />
     </main>
   );
 }

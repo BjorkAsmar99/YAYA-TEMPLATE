@@ -1,15 +1,16 @@
 {
-  "name": "pasta-cosi",
+  "name": "rumio-del-lini",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
     "framer-motion": "^12.6.2",
     "gsap": "^3.13.0",
     "lucide-react": "^0.511.0",

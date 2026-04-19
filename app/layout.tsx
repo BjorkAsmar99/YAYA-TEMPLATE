@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Cormorant_Garamond, Inter } from 'next/font/google';
 import './globals.css';
 
-const display = Playfair_Display({
+const display = Cormorant_Garamond({
   variable: '--font-display',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const sans = Inter({
@@ -13,9 +14,9 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Pasta Cosi | Entrer pour dîner',
+  title: 'Pastrani Vino | Restaurant premium à Paris',
   description:
-    'Expérience éditoriale et cinématique pour Pasta Cosi, restaurant italien à Paris, pensée comme un seuil, une lumière et une envie de réserver.',
+    'Site éditorial immersif pour Pastrani Vino, restaurant premium à Paris entre braise, cave de caractère et direction artistique cinématique.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
