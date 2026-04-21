@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 
 const sans = Inter({
@@ -7,14 +7,20 @@ const sans = Inter({
   subsets: ['latin'],
 });
 
+const serif = Cormorant_Garamond({
+  variable: '--font-serif',
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+});
+
 export const metadata: Metadata = {
-  title: 'Pastrani Vino | Paris VIII',
-  description: 'Pastrani Vino, restaurant du soir à Paris VIII. Cuisine précise, cave courte, salle tenue.',
+  title: 'Gumbo YAYA | Soul Food, Fried Chicken & Waffles',
+  description: 'Gumbo YAYA is a soulful fried chicken and waffle restaurant with a warm, modern, small-batch identity.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={sans.variable}>
+    <html lang="en" className={`${sans.variable} ${serif.variable}`}>
       <body>{children}</body>
     </html>
   );
