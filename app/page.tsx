@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight, Clock3, MapPin } from 'lucide-react';
 
 const menuItems = [
@@ -23,6 +24,11 @@ const menuItems = [
   },
 ] as const;
 
+const storyNotes = [
+  'Potluck-tight proportions, but retuned for syrup gloss, roux depth, and storefront warmth.',
+  'A few horizontal editorial bands now cut across the page so the composition feels more like a poster system than a restaurant template.',
+] as const;
+
 export default function Page() {
   return (
     <main className="potluck-yaya" id="top">
@@ -34,7 +40,14 @@ export default function Page() {
 
       <header className="py-header">
         <a href="#top" className="py-brand-mark" aria-label="Gumbo YAYA home">
-          GY
+          <Image
+            src="/gumbo-yaya-assets/Gumbo-Yaya-Logo-Vertical.png"
+            alt="Gumbo YAYA logo"
+            width={74}
+            height={74}
+            className="py-brand-logo"
+            priority
+          />
         </a>
         <nav className="py-nav" aria-label="Primary">
           <a href="#menu">Menu</a>
@@ -43,34 +56,72 @@ export default function Page() {
         </nav>
         <div className="py-actions" aria-label="Utilities">
           <a href="#visit">Order</a>
-          <a href="#menu">Cart</a>
         </div>
       </header>
 
       <section className="py-logo-band">
-        <div className="py-logo-lockup">
-          <span>GUMBO</span>
-          <span>YAYA</span>
+        <div className="py-logo-band-copy">
+          <p className="py-kicker">New Orleans comfort, framed like a poster</p>
+          <div className="py-logo-lockup" aria-hidden="true">
+            <span>GUMBO</span>
+            <span>YAYA</span>
+          </div>
+        </div>
+        <div className="py-logo-hero-card py-card-yellow">
+          <Image
+            src="/gumbo-yaya-assets/Gumbo-Yaya-Logo-Vertical.png"
+            alt="Illustrated Gumbo YAYA logo"
+            width={560}
+            height={720}
+            className="py-logo-hero-image"
+          />
         </div>
       </section>
 
       <section className="py-hero" id="story">
-        <div className="py-hero-image" role="img" aria-label="Warm Gumbo YAYA dining room" />
         <div className="py-hero-copy py-panel-lilac">
           <p className="py-kicker">Soul food, sharpened</p>
           <p className="py-intro">
-            Gumbo YAYA channels the Potluck-style split screen, oversized type, and bold Korean-market color blocking, then swaps in fried chicken, waffles, dark roux gumbo, and a slower Southern room.
+            Gumbo YAYA channels the Potluck split screen more exactly now, with bolder proportion, cleaner type rhythm, and richer food photography replacing the old room-led mood.
           </p>
           <a href="#menu" className="py-readmore">
             Read menu <ArrowRight size={17} />
           </a>
+        </div>
+        <div className="py-hero-media">
+          <div className="py-photo-frame py-photo-tall">
+            <Image
+              src="/gumbo-yaya-assets/food.webp"
+              alt="Chicken and waffles with syrup"
+              fill
+              className="py-photo"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              priority
+            />
+          </div>
+          <div className="py-hero-caption py-card-cream">
+            <p className="py-kicker">Featured plate</p>
+            <p>Golden crust, buttered waffle, cane syrup sheen, and no generic restaurant filler anywhere in the frame.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-horizontal-band py-card-black" aria-label="Design notes">
+        <div>
+          <p className="py-kicker">Graphic direction</p>
+          <h2>Hard color fields, centered navigation, and a more exact Potluck-market silhouette.</h2>
+        </div>
+        <div className="py-horizontal-copy">
+          {storyNotes.map((note) => (
+            <p key={note}>{note}</p>
+          ))}
         </div>
       </section>
 
       <section className="py-grid-band" id="menu">
         <article className="py-grid-card py-card-cream py-copy-card">
           <p className="py-kicker">House line</p>
-          <h2>Chicken, waffles, gumbo, pie, and a dining room built for lingering.</h2>
+          <h2>Chicken, waffles, gumbo, pie, and a tighter storefront composition built for lingering.</h2>
         </article>
 
         <article className="py-grid-card py-card-green py-list-card">
@@ -89,9 +140,16 @@ export default function Page() {
           </div>
         </article>
 
-        <article className="py-grid-card py-card-red py-stat-card">
-          <p className="py-kicker">Dining notes</p>
-          <p>Buttermilk crunch, cane syrup gloss, jazz-night warmth, and a storefront rhythm that feels graphic instead of generic.</p>
+        <article className="py-grid-card py-card-red py-photo-card">
+          <div className="py-photo-frame py-photo-square">
+            <Image
+              src="/gumbo-yaya-assets/food 2.webp"
+              alt="Fried chicken and waffles with sides across the table"
+              fill
+              className="py-photo"
+              sizes="(max-width: 900px) 100vw, 50vw"
+            />
+          </div>
         </article>
 
         <article className="py-grid-card py-card-black py-cta-card">
@@ -104,18 +162,42 @@ export default function Page() {
       <section className="py-split-band">
         <div className="py-split-copy py-panel-yellow">
           <p className="py-kicker">Composition first</p>
-          <h2>Big fields, thin rules, oversized sans, and hard-edged color changes.</h2>
+          <h2>Big fields, thin rules, oversized sans, and horizontal breaks that loosen the grid.</h2>
         </div>
         <div className="py-split-stack">
-          <div className="py-stack-card py-card-sand">
-            <p>
-              The layout now copies the reference more directly, with the giant logo band, poster-like split hero, and flat blocks carrying the hierarchy instead of decorative restaurant tropes.
-            </p>
+          <div className="py-stack-card py-card-sand py-photo-panel">
+            <div className="py-photo-frame py-photo-wide">
+              <Image
+                src="/gumbo-yaya-assets/Kitchen.jpg"
+                alt="Gumbo YAYA interior counter and kitchen"
+                fill
+                className="py-photo"
+                sizes="(max-width: 900px) 100vw, 50vw"
+              />
+            </div>
           </div>
           <div className="py-stack-card py-card-pink">
             <p>
-              Typography is pushed into the same family of compressed-feeling, oversized sans display with tighter tracking and larger editorial paragraphs.
+              The counter scene brings in real service energy, while the surrounding flat blocks keep the page in graphic-design territory instead of drifting into a standard food site.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-horizontal-band py-card-cream">
+        <div>
+          <p className="py-kicker">Storefront read</p>
+          <h2>Use the real signage, then frame it with strict spacing and confident copy.</h2>
+        </div>
+        <div className="py-band-image-wrap">
+          <div className="py-photo-frame py-photo-banner">
+            <Image
+              src="/gumbo-yaya-assets/Lovan_GumboYaya-3.webp"
+              alt="Gumbo YAYA storefront exterior"
+              fill
+              className="py-photo"
+              sizes="100vw"
+            />
           </div>
         </div>
       </section>
@@ -123,7 +205,7 @@ export default function Page() {
       <section className="py-visit" id="visit">
         <div className="py-visit-copy py-card-cream">
           <p className="py-kicker">Visit Gumbo YAYA</p>
-          <h2>Come for the crunch, stay for the soft light and deep brown gravy.</h2>
+          <h2>Come for the crunch, stay for the storefront glow and deep brown gravy.</h2>
         </div>
         <div className="py-visit-meta py-card-green">
           <p>
