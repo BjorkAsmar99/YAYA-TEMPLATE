@@ -1,16 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter, Cormorant_Garamond } from 'next/font/google';
+import { Instrument_Sans } from 'next/font/google';
 import './globals.css';
 
-const sans = Inter({
+const sans = Instrument_Sans({
   variable: '--font-sans',
   subsets: ['latin'],
-});
-
-const serif = Cormorant_Garamond({
-  variable: '--font-serif',
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${serif.variable}`}>
+    <html lang="en" className={sans.variable}>
       <body>{children}</body>
     </html>
   );

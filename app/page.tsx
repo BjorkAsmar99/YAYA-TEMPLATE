@@ -2,126 +2,135 @@
 
 import { ArrowRight, Clock3, MapPin } from 'lucide-react';
 
-const navItems = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Menu', href: '#menu' },
-  { label: 'Story', href: '#story' },
-  { label: 'Visit', href: '#visit' },
-] as const;
-
 const menuItems = [
   {
-    name: 'YAYA Chicken & Waffle',
-    description: 'Crisp fried chicken, deep maple butter, and a warm golden waffle.',
+    title: 'Chicken & Waffle Stack',
+    blurb: 'Shatter-crisp thighs, cayenne cane syrup, salted butter waffle.',
     price: '$18',
+    tone: 'gold',
   },
   {
-    name: 'Dark Roux Gumbo',
-    description: 'Slow-built stock, rice, herbs, and a peppery finish.',
+    title: 'Dark Roux Gumbo',
+    blurb: 'Long-cooked stock, smoked sausage, rice, scallion, pepper heat.',
     price: '$16',
+    tone: 'rose',
   },
   {
-    name: 'Hot Honey Tenders',
-    description: 'Thin crackle crust, cane sweetness, and pickled heat.',
+    title: 'Hot Honey Tenders',
+    blurb: 'Thin crackle crust, pickle snap, glossy sweet heat.',
     price: '$15',
+    tone: 'mint',
   },
-] as const;
-
-const notes = [
-  'Small-batch soul food',
-  'Fried chicken, waffles, gumbo',
-  'Editorial storefront rhythm',
-  'Thin borders, quiet pacing',
 ] as const;
 
 export default function Page() {
   return (
-    <main className="gy-home" id="top">
-      <header className="gy-header">
-        <div className="gy-announcement">Gumbo YAYA, fried chicken, waffles, and soul food with a cleaner storefront point of view.</div>
-        <div className="gy-nav-row">
-          <a href="#top" className="gy-brand" aria-label="Gumbo YAYA home">
-            Gumbo YAYA
-          </a>
-          <nav aria-label="Primary navigation" className="gy-nav">
-            {navItems.map((item) => (
-              <a key={item.href} href={item.href}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <a href="#visit" className="gy-nav-cta">
-            Order / Visit
-          </a>
+    <main className="potluck-yaya" id="top">
+      <section className="py-strip py-strip-pink" aria-label="Announcement">
+        <div className="py-marquee">
+          <span>Gumbo YAYA soul food storefront, fried chicken, waffles, gumbo, all day comfort.</span>
+        </div>
+      </section>
+
+      <header className="py-header">
+        <a href="#top" className="py-brand-mark" aria-label="Gumbo YAYA home">
+          GY
+        </a>
+        <nav className="py-nav" aria-label="Primary">
+          <a href="#menu">Menu</a>
+          <a href="#story">Story</a>
+          <a href="#visit">Visit</a>
+        </nav>
+        <div className="py-actions" aria-label="Utilities">
+          <a href="#visit">Order</a>
+          <a href="#menu">Cart</a>
         </div>
       </header>
 
-      <section className="gy-band gy-hero" id="overview">
-        <div className="gy-hero-copy">
-          <p className="gy-eyebrow">Soul food restaurant</p>
-          <h1>Fried chicken and waffles, stripped back into a calmer, sharper storefront.</h1>
+      <section className="py-logo-band">
+        <div className="py-logo-lockup">
+          <span>GUMBO</span>
+          <span>YAYA</span>
         </div>
-        <div className="gy-hero-side">
-          <p>
-            Gumbo YAYA now leans into broad horizontal sections, restrained merchandising, and a flatter editorial rhythm that feels much closer to Potluck while staying rooted in Southern comfort.
+      </section>
+
+      <section className="py-hero" id="story">
+        <div className="py-hero-image" role="img" aria-label="Warm Gumbo YAYA dining room" />
+        <div className="py-hero-copy py-panel-lilac">
+          <p className="py-kicker">Soul food, sharpened</p>
+          <p className="py-intro">
+            Gumbo YAYA channels the Potluck-style split screen, oversized type, and bold Korean-market color blocking, then swaps in fried chicken, waffles, dark roux gumbo, and a slower Southern room.
           </p>
-          <a href="#menu" className="gy-inline-link">
-            See the menu <ArrowRight size={16} />
+          <a href="#menu" className="py-readmore">
+            Read menu <ArrowRight size={17} />
           </a>
         </div>
       </section>
 
-      <section className="gy-band gy-notes-band" aria-label="Key details">
-        {notes.map((note) => (
-          <p key={note}>{note}</p>
-        ))}
-      </section>
+      <section className="py-grid-band" id="menu">
+        <article className="py-grid-card py-card-cream py-copy-card">
+          <p className="py-kicker">House line</p>
+          <h2>Chicken, waffles, gumbo, pie, and a dining room built for lingering.</h2>
+        </article>
 
-      <section className="gy-band gy-feature-band" id="menu">
-        <div className="gy-feature-intro">
-          <p className="gy-eyebrow">House menu</p>
-          <h2>Fewer modules, more room to breathe.</h2>
-        </div>
-        <div className="gy-feature-list" role="list" aria-label="Featured menu items">
-          {menuItems.map((item, index) => (
-            <article className="gy-feature-row" key={item.name} role="listitem">
-              <span className="gy-item-index">0{index + 1}</span>
-              <div className="gy-feature-copy">
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
+        <article className="py-grid-card py-card-green py-list-card">
+          <p className="py-kicker">Featured plates</p>
+          <div className="py-menu-list" role="list">
+            {menuItems.map((item, index) => (
+              <div className={`py-menu-item py-tone-${item.tone}`} key={item.title} role="listitem">
+                <span className="py-menu-index">0{index + 1}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.blurb}</p>
+                </div>
+                <strong>{item.price}</strong>
               </div>
-              <strong>{item.price}</strong>
-            </article>
-          ))}
+            ))}
+          </div>
+        </article>
+
+        <article className="py-grid-card py-card-red py-stat-card">
+          <p className="py-kicker">Dining notes</p>
+          <p>Buttermilk crunch, cane syrup gloss, jazz-night warmth, and a storefront rhythm that feels graphic instead of generic.</p>
+        </article>
+
+        <article className="py-grid-card py-card-black py-cta-card">
+          <p className="py-kicker">Now serving</p>
+          <h3>Weekend waffle brunch and late fried chicken plates.</h3>
+          <a href="#visit">Plan your visit</a>
+        </article>
+      </section>
+
+      <section className="py-split-band">
+        <div className="py-split-copy py-panel-yellow">
+          <p className="py-kicker">Composition first</p>
+          <h2>Big fields, thin rules, oversized sans, and hard-edged color changes.</h2>
+        </div>
+        <div className="py-split-stack">
+          <div className="py-stack-card py-card-sand">
+            <p>
+              The layout now copies the reference more directly, with the giant logo band, poster-like split hero, and flat blocks carrying the hierarchy instead of decorative restaurant tropes.
+            </p>
+          </div>
+          <div className="py-stack-card py-card-pink">
+            <p>
+              Typography is pushed into the same family of compressed-feeling, oversized sans display with tighter tracking and larger editorial paragraphs.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="gy-band gy-story-band" id="story">
-        <div>
-          <p className="gy-eyebrow">Why it feels different</p>
-          <h2>More horizontal, more refined, less busy.</h2>
+      <section className="py-visit" id="visit">
+        <div className="py-visit-copy py-card-cream">
+          <p className="py-kicker">Visit Gumbo YAYA</p>
+          <h2>Come for the crunch, stay for the soft light and deep brown gravy.</h2>
         </div>
-        <div className="gy-story-copy">
+        <div className="py-visit-meta py-card-green">
           <p>
-            The layout drops the stack of promo cards in favor of long storefront bands, simple separators, and larger type-led sections.
+            <MapPin size={16} /> A more faithful Potluck-style visual system, retuned for soul food and fried chicken.
           </p>
           <p>
-            The palette stays intact, but the composition is quieter, flatter, and more premium, with thin 1px rules doing most of the work.
-          </p>
-        </div>
-      </section>
-
-      <section className="gy-band gy-visit-band" id="visit">
-        <div className="gy-visit-heading">
-          <p className="gy-eyebrow">Visit Gumbo YAYA</p>
-          <h2>Come for the crunch, stay for the warm room and slow Sunday pace.</h2>
-        </div>
-        <div className="gy-visit-details">
-          <p>
-            <MapPin size={16} /> Designed for a modern soul food restaurant, not a generic cafe template.
-          </p>
-          <p>
-            <Clock3 size={16} /> Responsive, direct, and free of loading sequences or smooth-scroll behavior.
+            <Clock3 size={16} /> No smooth scroll, no intro animation, no loading sequence.
           </p>
         </div>
       </section>
