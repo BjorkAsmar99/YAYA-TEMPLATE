@@ -35,7 +35,14 @@ export default function Page() {
 
       <header className="py-header">
         <a href="#top" className="py-brand-mark" aria-label="Gumbo YAYA home">
-          GY
+          <Image
+            src="/gumbo-yaya-assets/Gumbo-Yaya-Logo-Vertical.png"
+            alt="Gumbo YAYA logo"
+            width={62}
+            height={62}
+            className="py-brand-logo"
+            priority
+          />
         </a>
         <nav className="py-nav" aria-label="Primary">
           <a href="#menu">Menu</a>
@@ -144,7 +151,7 @@ export default function Page() {
       </section>
 
       <section className="py-visit" id="visit">
-        <div className="py-visit-copy py-card-cream">
+        <div className="py-visit-copy py-card-pink py-visit-copy-horizontal">
           <p className="py-kicker">Visit Gumbo YAYA</p>
           <h2>Come for the crunch, stay for the soft light and deep brown gravy.</h2>
         </div>
@@ -155,6 +162,18 @@ export default function Page() {
           <p>
             <Clock3 size={16} /> No smooth scroll, no intro animation, no loading sequence.
           </p>
+        </div>
+      </section>
+
+      <section className="py-kitchen-footer">
+        <div className="py-photo-frame py-photo-footer">
+          <Image
+            src="/gumbo-yaya-assets/Kitchen.jpg"
+            alt="Gumbo YAYA kitchen counter and interior"
+            fill
+            className="py-photo"
+            sizes="100vw"
+          />
         </div>
       </section>
     </main>

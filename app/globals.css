@@ -192,10 +192,9 @@ svg {
 }
 
 .py-hero-image {
+  position: relative;
   min-height: 640px;
-  background-image: url('/gumbo-yaya-assets/room.jpg');
-  background-size: cover;
-  background-position: center center;
+  overflow: hidden;
 }
 
 .py-hero-copy,
@@ -205,6 +204,53 @@ svg {
 .py-visit-copy,
 .py-visit-meta {
   padding: clamp(1.2rem, 2.2vw, 2rem);
+}
+
+.py-brand-logo {
+  display: block;
+  width: auto;
+  height: 52px;
+  object-fit: contain;
+}
+
+.py-photo-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.py-photo {
+  object-fit: cover;
+}
+
+.py-photo-square {
+  min-height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.py-photo-wide {
+  min-height: 100%;
+}
+
+.py-photo-footer {
+  min-height: 520px;
+}
+
+.py-photo-panel {
+  padding: 0;
+}
+
+.py-visit-copy-horizontal {
+  max-width: none;
+}
+
+.py-visit-copy-horizontal h2 {
+  max-width: 18ch;
+}
+
+.py-kitchen-footer {
+  border-bottom: 1px solid var(--line);
 }
 
 .py-hero-copy,
