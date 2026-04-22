@@ -55,10 +55,6 @@ svg {
   flex: none;
 }
 
-img {
-  display: block;
-}
-
 .potluck-yaya {
   width: 100%;
   background: var(--paper);
@@ -71,7 +67,6 @@ img {
 .py-grid-band,
 .py-split-band,
 .py-visit,
-.py-horizontal-band,
 .py-menu-item,
 .py-stack-card {
   border-bottom: 1px solid var(--line);
@@ -144,30 +139,19 @@ img {
   top: 0;
   z-index: 30;
   display: grid;
-  grid-template-columns: minmax(92px, 120px) 1fr minmax(92px, 120px);
+  grid-template-columns: 82px 1fr auto;
   align-items: center;
-  min-height: 78px;
+  min-height: 66px;
   padding: 0 1rem;
 }
 
-.py-brand-mark,
-.py-actions {
-  min-width: 0;
-}
-
 .py-brand-mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: stretch;
+  display: grid;
+  place-items: center;
+  height: 66px;
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);
-  padding: 0.65rem 0.45rem;
-}
-
-.py-brand-logo {
-  width: min(100%, 72px);
-  height: auto;
+  font-size: 1.1rem;
 }
 
 .py-nav,
@@ -179,54 +163,24 @@ img {
   font-size: 0.82rem;
 }
 
-.py-nav {
-  justify-content: center;
-}
-
 .py-actions {
   justify-content: flex-end;
 }
 
 .py-logo-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-  gap: 0;
-}
-
-.py-logo-band-copy,
-.py-logo-hero-card {
-  min-height: min(70vw, 760px);
-  padding: clamp(1rem, 2vw, 1.5rem);
-}
-
-.py-logo-band-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid var(--line);
+  padding: 1rem 1rem 0.6rem;
 }
 
 .py-logo-lockup {
   display: grid;
   gap: 0;
-  font-size: clamp(5.2rem, 15vw, 12rem);
+  font-size: clamp(5rem, 15vw, 12rem);
   line-height: 0.82;
-  letter-spacing: -0.075em;
+  letter-spacing: -0.07em;
 }
 
 .py-logo-lockup span {
   display: block;
-}
-
-.py-logo-hero-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.py-logo-hero-image {
-  width: min(100%, 420px);
-  height: auto;
 }
 
 .py-hero,
@@ -234,10 +188,14 @@ img {
 .py-visit {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 66px);
 }
 
-.py-hero {
-  min-height: calc(100vh - 78px);
+.py-hero-image {
+  min-height: 640px;
+  background-image: url('/gumbo-yaya-assets/room.jpg');
+  background-size: cover;
+  background-position: center center;
 }
 
 .py-hero-copy,
@@ -245,8 +203,7 @@ img {
 .py-split-copy,
 .py-stack-card,
 .py-visit-copy,
-.py-visit-meta,
-.py-horizontal-band {
+.py-visit-meta {
   padding: clamp(1.2rem, 2.2vw, 2rem);
 }
 
@@ -258,42 +215,6 @@ img {
   justify-content: center;
 }
 
-.py-hero-media {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  border-left: 1px solid var(--line);
-}
-
-.py-photo-frame {
-  position: relative;
-  overflow: hidden;
-}
-
-.py-photo {
-  object-fit: cover;
-}
-
-.py-photo-tall {
-  min-height: 640px;
-}
-
-.py-photo-square {
-  min-height: 100%;
-}
-
-.py-photo-wide {
-  min-height: 320px;
-}
-
-.py-photo-banner {
-  min-height: 430px;
-}
-
-.py-hero-caption {
-  border-top: 1px solid var(--line);
-  padding: 1rem 1.25rem 1.1rem;
-}
-
 .py-kicker {
   margin: 0 0 1rem;
   font-size: 0.76rem;
@@ -303,16 +224,14 @@ img {
 .py-stat-card p,
 .py-stack-card p,
 .py-menu-item p,
-.py-visit-meta p,
-.py-horizontal-copy p,
-.py-hero-caption p {
+.py-visit-meta p {
   font-size: clamp(1rem, 1.6vw, 1.35rem);
   line-height: 1.18;
 }
 
 .py-intro {
-  max-width: 21ch;
-  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  max-width: 22ch;
+  font-size: clamp(1.5rem, 2.3vw, 2.15rem);
 }
 
 .py-readmore,
@@ -327,36 +246,6 @@ img {
   font-size: 0.85rem;
 }
 
-.py-horizontal-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 1.5rem;
-}
-
-.py-horizontal-band h2,
-.py-copy-card h2,
-.py-split-copy h2,
-.py-visit-copy h2 {
-  margin: 0;
-  max-width: 11ch;
-  font-size: clamp(2.8rem, 6.8vw, 6.6rem);
-  line-height: 0.9;
-  letter-spacing: -0.055em;
-  font-weight: 500;
-}
-
-.py-horizontal-copy {
-  display: grid;
-  gap: 1rem;
-  max-width: 34rem;
-}
-
-.py-horizontal-copy p,
-.py-band-image-wrap {
-  margin: 0;
-}
-
 .py-grid-band {
   display: grid;
   grid-template-columns: 1.05fr 1fr;
@@ -369,6 +258,17 @@ img {
 
 .py-grid-card:nth-child(2n) {
   border-right: 0;
+}
+
+.py-copy-card h2,
+.py-split-copy h2,
+.py-visit-copy h2 {
+  margin: 0;
+  max-width: 10ch;
+  font-size: clamp(2.8rem, 6.8vw, 6.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 500;
 }
 
 .py-menu-list {
@@ -410,34 +310,15 @@ img {
   font-weight: 500;
 }
 
-.py-tone-gold {
-  color: #f5f0bd;
-}
-
-.py-tone-rose {
-  color: #ffd4c9;
-}
-
-.py-tone-mint {
-  color: #dff6bf;
-}
-
+.py-tone-gold { color: #f5f0bd; }
+.py-tone-rose { color: #ffd4c9; }
+.py-tone-mint { color: #dff6bf; }
 .py-tone-gold strong,
 .py-tone-rose strong,
 .py-tone-mint strong,
 .py-tone-gold .py-menu-index,
 .py-tone-rose .py-menu-index,
-.py-tone-mint .py-menu-index {
-  color: inherit;
-}
-
-.py-photo-card {
-  padding: 0;
-}
-
-.py-photo-card .py-photo-square {
-  min-height: 100%;
-}
+.py-tone-mint .py-menu-index { color: inherit; }
 
 .py-stat-card,
 .py-cta-card,
@@ -452,15 +333,11 @@ img {
 }
 
 .py-split-stack {
-  grid-template-rows: 1.15fr 0.85fr;
+  grid-template-rows: 1fr 1fr;
 }
 
 .py-stack-card + .py-stack-card {
   border-top: 1px solid var(--line);
-}
-
-.py-photo-panel {
-  padding: 0;
 }
 
 .py-visit-meta {
@@ -476,12 +353,10 @@ img {
 
 @media (max-width: 900px) {
   .py-header,
-  .py-logo-band,
   .py-hero,
   .py-grid-band,
   .py-split-band,
   .py-visit,
-  .py-horizontal-band,
   .py-menu-item {
     grid-template-columns: 1fr;
   }
@@ -494,59 +369,44 @@ img {
   .py-brand-mark,
   .py-nav,
   .py-actions,
-  .py-grid-card,
-  .py-logo-band-copy,
-  .py-hero-media {
+  .py-grid-card {
     border-right: 0;
-    border-left: 0;
   }
 
   .py-nav,
   .py-actions {
     padding: 0.85rem 1rem;
     border-top: 1px solid var(--line);
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
   }
 
-  .py-logo-band-copy,
-  .py-logo-hero-card,
   .py-hero,
   .py-split-band,
   .py-visit {
     min-height: auto;
   }
 
-  .py-photo-tall,
-  .py-photo-banner {
+  .py-hero-image {
     min-height: 56vh;
   }
 
-  .py-photo-square,
-  .py-photo-wide {
-    min-height: 50vh;
-  }
-
-  .py-horizontal-band h2,
   .py-copy-card h2,
   .py-split-copy h2,
-  .py-visit-copy h2,
-  .py-intro {
+  .py-visit-copy h2 {
     max-width: none;
   }
 }
 
 @media (max-width: 640px) {
-  .py-logo-band-copy,
-  .py-logo-hero-card,
+  .py-logo-band,
   .py-marquee,
   .py-hero-copy,
   .py-grid-card,
   .py-split-copy,
   .py-stack-card,
   .py-visit-copy,
-  .py-visit-meta,
-  .py-horizontal-band {
+  .py-visit-meta {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
   }
