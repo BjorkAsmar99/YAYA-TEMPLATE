@@ -65,8 +65,8 @@ export default function Page() {
       <section className="py-hero" id="story">
         <div className="py-hero-image">
           <Image
-            src="/gumbo-yaya-assets/food.webp"
-            alt="Chicken and waffles with syrup"
+            src="/gumbo-yaya-assets/menu-Gumbo-Yaya-bqc.jpg"
+            alt="Gumbo YAYA menu presentation"
             fill
             className="py-photo"
             sizes="(max-width: 900px) 100vw, 50vw"
