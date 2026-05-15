@@ -8,8 +8,9 @@ const sans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Gumbo YAYA | Soul Food, Fried Chicken & Waffles',
-  description: 'Gumbo YAYA is a soulful fried chicken and waffle restaurant with a warm, modern, small-batch identity.',
+  title: 'GetONLINE | Premium Web Agency Landing Pages',
+  description:
+    'GetONLINE creates premium digital agency websites with cinematic scrolling, strong positioning, and polished modern frontend execution.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

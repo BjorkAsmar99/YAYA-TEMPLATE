@@ -1,179 +1,291 @@
 'use client';
 
-import Image from 'next/image';
-import { ArrowRight, Clock3, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Globe2, Layers3, Orbit, Sparkles } from 'lucide-react';
 
-const menuItems = [
+const sections = [
+  { id: 'hero', label: 'Intro' },
+  { id: 'positioning', label: 'Positioning' },
+  { id: 'services', label: 'Services' },
+  { id: 'process', label: 'Process' },
+  { id: 'contact', label: 'Contact' },
+] as const;
+
+const services = [
   {
-    title: 'Chicken & Waffle Stack',
-    blurb: 'Shatter-crisp thighs, cayenne cane syrup, salted butter waffle.',
-    price: '$18',
-    tone: 'gold',
+    number: '01',
+    title: 'Agency websites with presence',
+    text: 'Cinematic landing pages and premium multi-section sites built to feel expensive before a single word is read.',
   },
   {
-    title: 'Dark Roux Gumbo',
-    blurb: 'Long-cooked stock, smoked sausage, rice, scallion, pepper heat.',
-    price: '$16',
-    tone: 'rose',
+    number: '02',
+    title: 'Conversion-first experience design',
+    text: 'Narrative structure, hierarchy, motion, and proof arranged to turn attention into trust and trust into action.',
   },
   {
-    title: 'Hot Honey Tenders',
-    blurb: 'Thin crackle crust, pickle snap, glossy sweet heat.',
-    price: '$15',
-    tone: 'mint',
+    number: '03',
+    title: 'Modern frontend execution',
+    text: 'Fast, responsive, maintainable builds with refined transitions, precise spacing, and no cheap template energy.',
   },
 ] as const;
 
-export default function Page() {
-  return (
-    <main className="potluck-yaya" id="top">
-      <section className="py-strip py-strip-pink" aria-label="Announcement">
-        <div className="py-marquee">
-          <span>Gumbo YAYA soul food storefront, fried chicken, waffles, gumbo, all day comfort.</span>
-        </div>
-      </section>
+const process = [
+  'Strategy and offer framing',
+  'Visual direction and interaction system',
+  'Build, refine, and performance polish',
+  'Launch support and future iterations',
+] as const;
 
-      <header className="py-header">
-        <a href="#top" className="py-brand-mark" aria-label="Gumbo YAYA home">
-          <Image
-            src="/gumbo-yaya-assets/Gumbo-Yaya-Logo-Vertical.png"
-            alt="Gumbo YAYA logo"
-            width={62}
-            height={62}
-            className="py-brand-logo"
-            priority
-          />
+export default function Page() {
+  const [activeSection, setActiveSection] = useState('hero');
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+    const sectionsEls = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.setAttribute('data-visible', 'true');
+          }
+        });
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    revealTargets.forEach((element) => revealObserver.observe(element));
+
+    const updateScrollState = () => {
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - window.innerHeight;
+      const nextProgress = total > 0 ? window.scrollY / total : 0;
+      setScrollProgress(nextProgress);
+
+      const viewportMiddle = window.innerHeight * 0.45;
+      let bestId = 'hero';
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      sectionsEls.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const distance = Math.abs(rect.top - viewportMiddle);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestId = section.id;
+        }
+      });
+
+      setActiveSection(bestId);
+    };
+
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('resize', updateScrollState);
+
+    return () => {
+      revealObserver.disconnect();
+      window.removeEventListener('scroll', updateScrollState);
+      window.removeEventListener('resize', updateScrollState);
+    };
+  }, []);
+
+  return (
+    <main className="go-site" id="top">
+      <div className="go-noise" aria-hidden="true" />
+      <div className="go-aurora go-aurora-one" aria-hidden="true" />
+      <div className="go-aurora go-aurora-two" aria-hidden="true" />
+
+      <header className="go-header">
+        <a href="#top" className="go-brand" aria-label="GetONLINE home">
+          <span className="go-brand-word">GetONLINE</span>
+          <span className="go-brand-dot" />
         </a>
-        <nav className="py-nav" aria-label="Primary">
-          <a href="#menu">Menu</a>
-          <a href="#story">Story</a>
-          <a href="#visit">Visit</a>
+
+        <nav className="go-nav" aria-label="Primary">
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#contact">Contact</a>
         </nav>
-        <div className="py-actions" aria-label="Utilities">
-          <a href="#visit">Order</a>
-          <a href="#menu">Cart</a>
-        </div>
+
+        <a href="#contact" className="go-header-cta">
+          Start a project
+        </a>
       </header>
 
-      <section className="py-logo-band">
-        <div className="py-logo-lockup">
-          <span>GUMBO</span>
-          <span>YAYA</span>
+      <aside className="go-rail" aria-label="Section progress">
+        <div className="go-rail-line">
+          <span style={{ transform: `scaleY(${Math.max(0.04, scrollProgress)})` }} />
         </div>
-      </section>
+        <div className="go-rail-labels">
+          {sections.map((section) => (
+            <a
+              key={section.id}
+              href={`#${section.id}`}
+              className={activeSection === section.id ? 'is-active' : ''}
+            >
+              {section.label}
+            </a>
+          ))}
+        </div>
+      </aside>
 
-      <section className="py-hero" id="story">
-        <div className="py-hero-image">
-          <Image
-            src="/gumbo-yaya-assets/menu-Gumbo-Yaya-bqc.jpg"
-            alt="Gumbo YAYA menu presentation"
-            fill
-            className="py-photo"
-            sizes="(max-width: 900px) 100vw, 50vw"
-            priority
-          />
-        </div>
-        <div className="py-hero-copy py-panel-lilac">
-          <p className="py-kicker">Soul food, sharpened</p>
-          <p className="py-intro">
-            Gumbo YAYA channels the Potluck-style split screen, oversized type, and bold Korean-market color blocking, then swaps in fried chicken, waffles, dark roux gumbo, and a slower Southern room.
+      <section className="go-hero" id="hero" data-section>
+        <div className="go-hero-copy">
+          <p className="go-eyebrow" data-reveal>
+            Digital presence, sharpened for now
           </p>
-          <a href="#menu" className="py-readmore">
-            Read menu <ArrowRight size={17} />
-          </a>
+
+          <h1 className="go-title">
+            <span data-reveal style={{ transitionDelay: '0ms' }}>
+              We build
+            </span>
+            <span data-reveal style={{ transitionDelay: '100ms' }}>
+              magnetic
+            </span>
+            <span data-reveal style={{ transitionDelay: '200ms' }}>
+              websites for
+            </span>
+            <span data-reveal style={{ transitionDelay: '300ms' }}>
+              modern brands.
+            </span>
+          </h1>
+
+          <p className="go-hero-text" data-reveal style={{ transitionDelay: '420ms' }}>
+            GetONLINE creates high-end digital agency websites with cinematic scrolling, disciplined motion, and a premium visual rhythm that makes the brand feel established from the first second.
+          </p>
+
+          <div className="go-hero-actions" data-reveal style={{ transitionDelay: '520ms' }}>
+            <a href="#contact" className="go-button go-button-primary">
+              Build my landing page <ArrowRight size={18} />
+            </a>
+            <a href="#services" className="go-button go-button-ghost">
+              Explore the system
+            </a>
+          </div>
+        </div>
+
+        <div className="go-hero-stage" aria-hidden="true">
+          <div className="go-stage-card go-stage-card-main" data-reveal>
+            <span>Strategy</span>
+            <span>Motion</span>
+            <span>Presence</span>
+          </div>
+          <div className="go-stage-card go-stage-card-floating" data-reveal style={{ transitionDelay: '200ms' }}>
+            <Sparkles size={18} />
+            <p>Scroll-led storytelling with blur, pace, contrast, and controlled reveals.</p>
+          </div>
         </div>
       </section>
 
-      <section className="py-grid-band" id="menu">
-        <article className="py-grid-card py-card-cream py-copy-card">
-          <p className="py-kicker">House line</p>
-          <h2>Chicken, waffles, gumbo, pie, and a dining room built for lingering.</h2>
-        </article>
+      <section className="go-panel go-panel-sticky" id="positioning" data-section>
+        <div className="go-panel-index" data-reveal>
+          01
+        </div>
+        <div className="go-panel-content">
+          <p className="go-section-kicker" data-reveal>
+            Positioning
+          </p>
+          <h2 className="go-section-title" data-reveal>
+            Not another template. A digital front door with gravity.
+          </h2>
+          <p className="go-section-text" data-reveal>
+            The reference site works because it controls pace, contrast, and attention. GetONLINE takes that same principle and adapts it for a web agency: strong type, layered background atmosphere, sticky moments, and text that resolves from blur into clarity as the offer becomes more specific.
+          </p>
+        </div>
+      </section>
 
-        <article className="py-grid-card py-card-green py-list-card">
-          <p className="py-kicker">Featured plates</p>
-          <div className="py-menu-list" role="list">
-            {menuItems.map((item, index) => (
-              <div className={`py-menu-item py-tone-${item.tone}`} key={item.title} role="listitem">
-                <span className="py-menu-index">0{index + 1}</span>
+      <section className="go-services" id="services" data-section>
+        <div className="go-services-sticky">
+          <div className="go-services-heading">
+            <p className="go-section-kicker" data-reveal>
+              Services
+            </p>
+            <h2 className="go-section-title" data-reveal>
+              Built to look premium. Engineered to sell.
+            </h2>
+          </div>
+
+          <div className="go-services-list">
+            {services.map((service, index) => (
+              <article
+                className="go-service-card"
+                key={service.title}
+                data-reveal
+                style={{ transitionDelay: `${index * 120}ms` }}
+              >
+                <div className="go-service-number">{service.number}</div>
                 <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.blurb}</p>
+                  <h3>{service.title}</h3>
+                  <p>{service.text}</p>
                 </div>
-                <strong>{item.price}</strong>
-              </div>
+              </article>
             ))}
           </div>
-        </article>
-
-        <article className="py-grid-card py-card-red py-stat-card">
-          <div className="py-photo-frame py-photo-square">
-            <Image
-              src="/gumbo-yaya-assets/food 2.webp"
-              alt="Fried chicken and waffles with sides across the table"
-              fill
-              className="py-photo"
-              sizes="(max-width: 900px) 100vw, 50vw"
-            />
-          </div>
-        </article>
-
-        <article className="py-grid-card py-card-black py-cta-card">
-          <p className="py-kicker">Now serving</p>
-          <h3>Weekend waffle brunch and late fried chicken plates.</h3>
-          <a href="#visit">Plan your visit</a>
-        </article>
+        </div>
       </section>
 
-      <section className="py-split-band">
-        <div className="py-split-copy py-panel-yellow">
-          <p className="py-kicker">Composition first</p>
-          <h2>Big fields, thin rules, oversized sans, and hard-edged color changes.</h2>
+      <section className="go-showcase-band" data-section>
+        <div className="go-showcase-copy">
+          <p className="go-section-kicker" data-reveal>
+            Visual language
+          </p>
+          <h2 className="go-section-title" data-reveal>
+            Blur. Reveal. Hold. Move. Repeat with intent.
+          </h2>
+          <p className="go-section-text" data-reveal>
+            The landing page is structured like a controlled narrative. Big still moments. Sharp transitions. Elegant tension between restraint and spectacle. When you send the 21st.dev elements, I’ll integrate them into the atmospheric layers, textures, and section backgrounds.
+          </p>
         </div>
-        <div className="py-split-stack">
-          <div className="py-stack-card py-card-sand py-photo-panel">
-            <div className="py-photo-frame py-photo-wide">
-              <Image
-                src="/gumbo-yaya-assets/Kitchen.jpg"
-                alt="Gumbo YAYA interior counter and kitchen"
-                fill
-                className="py-photo"
-                sizes="(max-width: 900px) 100vw, 50vw"
-              />
+
+        <div className="go-showcase-grid" aria-hidden="true">
+          <div className="go-showcase-block go-showcase-block-large" data-reveal>
+            <span>SCROLL</span>
+          </div>
+          <div className="go-showcase-block" data-reveal style={{ transitionDelay: '120ms' }}>
+            <Globe2 size={22} />
+            <p>Global-first positioning</p>
+          </div>
+          <div className="go-showcase-block" data-reveal style={{ transitionDelay: '220ms' }}>
+            <Layers3 size={22} />
+            <p>Layered layouts and depth</p>
+          </div>
+          <div className="go-showcase-block" data-reveal style={{ transitionDelay: '320ms' }}>
+            <Orbit size={22} />
+            <p>Motion with control</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="go-process" id="process" data-section>
+        <div className="go-process-copy">
+          <p className="go-section-kicker" data-reveal>
+            Process
+          </p>
+          <h2 className="go-section-title" data-reveal>
+            A clear build path, without generic output.
+          </h2>
+        </div>
+        <div className="go-process-list">
+          {process.map((item, index) => (
+            <div className="go-process-item" key={item} data-reveal style={{ transitionDelay: `${index * 100}ms` }}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <p>{item}</p>
             </div>
-          </div>
-          <div className="py-stack-card py-card-pink">
-            <p>
-              Typography is pushed into the same family of compressed-feeling, oversized sans display with tighter tracking and larger editorial paragraphs.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className="py-visit" id="visit">
-        <div className="py-visit-copy py-card-pink py-visit-copy-horizontal">
-          <p className="py-kicker">Visit Gumbo YAYA</p>
-          <h2>Come for the crunch, stay for the soft light and deep brown gravy.</h2>
-        </div>
-        <div className="py-visit-meta py-card-green">
+      <section className="go-contact" id="contact" data-section>
+        <div className="go-contact-panel" data-reveal>
+          <p className="go-section-kicker">GetONLINE</p>
+          <h2>Ready to turn your agency into something people remember?</h2>
           <p>
-            <MapPin size={16} /> A more faithful Potluck-style visual system, retuned for soul food and fried chicken.
+            We can now keep pushing this direction: stronger sections, richer media, and custom visual texture once you send the 21st.dev references.
           </p>
-          <p>
-            <Clock3 size={16} /> No smooth scroll, no intro animation, no loading sequence.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-kitchen-footer">
-        <div className="py-photo-frame py-photo-footer">
-          <Image
-            src="/gumbo-yaya-assets/Kitchen.jpg"
-            alt="Gumbo YAYA kitchen counter and interior"
-            fill
-            className="py-photo"
-            sizes="100vw"
-          />
+          <a href="mailto:hello@getonline.studio" className="go-button go-button-primary">
+            hello@getonline.studio <ArrowRight size={18} />
+          </a>
         </div>
       </section>
     </main>
